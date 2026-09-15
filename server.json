@@ -1,0 +1,13 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "com.instaseer/mcp",
+  "description": "Use permitted saved Instagram research in AI assistants, compare source-linked reports, and prepare fresh research for owner review.",
+  "version": "1.0.0",
+  "websiteUrl": "https://www.instaseer.com/mcp",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://www.instaseer.com/mcp"
+    }
+  ]
+}
