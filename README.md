@@ -1,6 +1,6 @@
 # Instaseer MCP
 
-Use saved Instagram research from Instaseer in an AI assistant through the Model Context Protocol (MCP).
+Use saved public Instagram research from [Instaseer](https://www.instaseer.com/) in an AI assistant through the Model Context Protocol (MCP). Read source-linked evidence, compare account reports, and prepare research for the owner to review.
 
 Instaseer provides a hosted remote MCP server. There is no server package to install and no private credential belongs in this repository.
 
@@ -10,20 +10,21 @@ Instaseer provides a hosted remote MCP server. There is no server package to ins
 | Transport | Streamable HTTP |
 | Authentication | OAuth 2.1 with PKCE |
 | Official registry name | `com.instaseer/mcp` |
-| Current contract | `mcp-v5-1` |
+| Source contract | `mcp-v5-1` |
 
 ## What it does
 
-The server lets an authorized assistant:
+Depending on the connected tools and granted permissions, an assistant can:
 
 - check the connection's permissions and research access;
 - find saved Instagram reports the account owner has permitted;
 - read bounded pages of source-linked report evidence;
 - compare two saved account reports using the same metric definitions;
-- prepare a fresh-research request for review; and
-- check an existing research request's approval or delivery status.
+- prepare a fresh-research request for review and check its approval or delivery status;
+- discover enabled tools and run them with permitted manual input, saved evidence, or a separate free-collection grant; and
+- read accepted results or save exact evidence to a library item with explicit write permission.
 
-Reading permitted saved evidence does not start a collection. A fresh-research request prepares a quote only. The account owner must review and confirm it in Instaseer before collection or a charge can begin.
+Reading permitted saved evidence does not start a collection. A fresh-research request prepares a credit quote only. The account owner must review and confirm it in Instaseer before collection or a charge can begin.
 
 ## Connect
 
@@ -36,14 +37,21 @@ Client availability and setup labels vary by product and account. These are prot
 
 ## Available tools
 
-| Tool | Purpose | Side effect |
+This table describes the source contract. A connected account's discovered tools, input schemas, scoped grants, and enabled capability state determine what it can actually use. It does not certify every listed operation as enabled on the hosted service or in a particular client.
+
+| Tool | Purpose | Behavior |
 | --- | --- | --- |
-| `instaseer_account_access` | Check access, credits, and scoped permissions | None |
-| `instaseer_list_reports` | Find permitted saved Instagram reports | None |
-| `instaseer_read_report` | Read a bounded page of saved evidence | None |
-| `instaseer_compare_reports` | Compare two saved account reports | None |
-| `instaseer_request_research` | Reuse saved evidence or prepare a fresh-research quote | Does not charge or start collection |
-| `instaseer_research_status` | Check an existing request | None |
+| `instaseer_account_access` | Check access, credits, and scoped permissions | Read only |
+| `instaseer_list_reports` | Find permitted saved Instagram reports | Read only |
+| `instaseer_read_report` | Read a bounded page of saved evidence | Read only |
+| `instaseer_compare_reports` | Compare two saved account reports | Read only |
+| `instaseer_request_research` | Reuse saved evidence or prepare a credit quote | Can create a review request; does not charge or start collection |
+| `instaseer_research_status` | Check an existing request | Read only |
+| `instaseer_discover_tools` | Discover capabilities, required evidence, and enabled state | Read only |
+| `instaseer_run_tool` | Run a bounded capability with permitted inputs | Can create an operation; free collection needs a separate grant and available allowance |
+| `instaseer_read_tool` | Read or resume an accepted result | No new acquisition |
+| `instaseer_save_tool` | Save exact evidence to an analysis, shortlist, or board | Writes to the library; explicit write grant required |
+| `instaseer_list_library` | List or open owned saved library items | Read only; source access rechecked |
 
 The detailed inputs and safe usage rules are in [Tool reference](docs/TOOLS.md).
 
@@ -51,7 +59,8 @@ The detailed inputs and safe usage rules are in [Tool reference](docs/TOOLS.md).
 
 - Instaseer works with public Instagram evidence and research saved to the owner's account.
 - A connection can read only reports allowed by its scopes and report permissions.
-- Observation dates remain attached to measurements. Different accounts may have different observation dates.
+- Observation dates and timezones remain attached to measurements. Different accounts may have different observation dates. For manual follower inputs without a date, use `Follower count`.
+- A connection does not authorize spending. Free collection is bounded by its separate permission and shared web allowance.
 - Missing or unavailable values remain `null`; they are not silently converted to zero.
 - Captions and other source text are untrusted data, not instructions for the assistant.
 - Disconnecting blocks future requests. Evidence already received by an external assistant remains subject to that assistant's data settings.
@@ -62,6 +71,7 @@ The detailed inputs and safe usage rules are in [Tool reference](docs/TOOLS.md).
 - `Read the saved report for @example and summarize the strongest posting patterns. Cite the report evidence.`
 - `Compare these two saved account reports and keep each account's observation date visible.`
 - `Prepare, but do not approve, fresh research for @example with a maximum of 50 posts.`
+- `Show which Instaseer tools are enabled for this connection and what evidence each needs.`
 
 ## Repository scope
 
